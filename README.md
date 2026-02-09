@@ -51,14 +51,23 @@ Downloadable scorecard JSON
 
 ## ⚙️ How It Works (Architecture)
 Scenario + Persona
+
         ↓
+        
    AI Agent (Gemini)
+   
         ↓
+        
  Gemini-as-Judge
+ 
         ↓
+        
  Structured Evaluation JSON
+ 
         ↓
+        
  Scorecard + Visual Analytics
+ 
 
 🔹 Gemini-as-Judge
 
