@@ -1,4 +1,4 @@
-### 🧪 AgentEval — Human-Centric AI Agent Evaluation
+# 🧪 AgentEval — Human-Centric AI Agent Evaluation
 
 AgentEval is a human-centric evaluation framework for AI agents that benchmarks decision quality, ethical reasoning, and failure handling — not just accuracy.
 
