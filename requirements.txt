@@ -1,8 +1,7 @@
-streamlit==1.37.1
-python-dotenv==1.0.1
-google-genai==0.7.0
-pandas==2.2.2
-numpy==2.0.1
-matplotlib==3.9.1
-plotly==5.22.0
-
+streamlit>=1.30
+python-dotenv>=1.0
+google-genai>=0.7
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.7
+plotly>=5.18
