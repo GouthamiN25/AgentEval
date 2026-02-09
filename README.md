@@ -30,12 +30,14 @@ AgentEval was built to evaluate these human-level qualities in AI agents.
 
 AgentEval simulates high-stakes real-world scenarios and evaluates AI agents across five human-centric dimensions:
 
-Dimension	What It Measures
-Reasoning Quality	Clarity, structure, and depth of reasoning
-Decision Consistency	Alignment between actions and stated constraints
-Collaboration Mindset	Stakeholder awareness and coordination
-Bias Awareness	Recognition and mitigation of unfair outcomes
-Failure Handling	Safety guardrails, rollback plans, and accountability
+
+| Dimension                 | What It Measures                                      |
+| ------------------------- | ----------------------------------------------------- |
+| **Reasoning Quality**     | Clarity, structure, and depth of reasoning            |
+| **Decision Consistency**  | Alignment between actions and stated constraints      |
+| **Collaboration Mindset** | Stakeholder awareness and coordination                |
+| **Bias Awareness**        | Recognition and mitigation of unfair outcomes         |
+| **Failure Handling**      | Safety guardrails, rollback plans, and accountability |
 
 Results are presented as:
 
@@ -75,9 +77,11 @@ Judges always see results
 ## 🧪 Example Scenarios
 
 Chimera Recruitment Bias Crisis
+
 AI recruitment system shows bias against a protected group under launch pressure.
 
 Aether Mental Health Launch Crisis
+
 Mental health chatbot shows unsafe confidence; safety vs growth trade-offs required.
 
 Each scenario forces agents to balance ethics, business impact, and compliance.
@@ -98,13 +102,21 @@ Deployment: Streamlit Community Cloud
 
 ## 📁 Project Structure
 AgentEval/
+
 ├── app.py                # Main Streamlit application
+
 ├── gemini_client.py      # Gemini API wrapper
+
 ├── prompts.py            # Agent & evaluator prompts
+
 ├── scoring.py            # JSON parsing & scoring logic
+
 ├── storage.py            # Run persistence (local)
+
 ├── requirements.txt      # Dependencies
+
 ├── runtime.txt           # Python runtime for Streamlit
+
 ├── .gitignore            # Secrets & env protection
 
 ## 🔐 Environment Setup (Local)
@@ -130,9 +142,13 @@ The app is deployed on Streamlit Cloud:
 ## 🎯 What Makes AgentEval Different
 
 ✅ Evaluates how an AI reasons, not just outputs
+
 ✅ Uses LLM-as-Judge instead of hard-coded rules
+
 ✅ Human-centric dimensions aligned with real leadership review
+
 ✅ Reliable public demos via Demo Mode fallback
+
 ✅ Transparent, explainable scorecards
 
 ## 🔮 Future Improvements
@@ -150,5 +166,7 @@ Support for additional judge models
 ## 👩‍💻 Author
 
 Gouthami Nadupuri
-Data Scientist | AI & Agentic Systems
+
+Data Scientist | AI Engineer
+
 GitHub: https://github.com/GouthamiN25
