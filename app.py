@@ -1,3 +1,4 @@
+# app.py
 import json
 import random
 import streamlit as st
@@ -32,7 +33,8 @@ DEMO_EVAL_JSON_TEXT = """
 """
 
 # ------------------ STYLE ------------------
-st.markdown("""
+st.markdown(
+    """
 <style>
 .stApp{
   background:
@@ -107,7 +109,9 @@ header{visibility:hidden;}
 }
 label, .stMarkdown { color: rgba(255,255,255,0.86) !important; }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ------------------ DATA ------------------
 DEFAULT_SCENARIOS = {
@@ -121,7 +125,6 @@ Constraints:
 - Balance fairness, business impact, and compliance
 - Consider stakeholder communication
 - Address uncertainty and what you'd validate next""",
-
     "Aether Mental Health Launch Crisis": """You are the Product Lead at MediTech Solutions launching 'Aether', a mental health support chatbot.
 Beta testers report it sometimes gives overconfident advice. A clinician partner is concerned about safety and liability.
 Marketing is scheduled to announce the product in 5 days. Your investors want growth. Compliance wants guardrails.
@@ -148,11 +151,19 @@ def to_100(score_1_to_5: int) -> int:
     return int(round((score_1_to_5 / 5.0) * 100))
 
 def overall_rank(avg_100: float) -> str:
-    if avg_100 >= 90: return "EXCELLENT"
-    if avg_100 >= 80: return "STRONG"
-    if avg_100 >= 70: return "GOOD"
-    if avg_100 >= 60: return "FAIR"
+    if avg_100 >= 90:
+        return "EXCELLENT"
+    if avg_100 >= 80:
+        return "STRONG"
+    if avg_100 >= 70:
+        return "GOOD"
+    if avg_100 >= 60:
+        return "FAIR"
     return "NEEDS WORK"
+
+def is_quota_error(e: Exception) -> bool:
+    s = str(e).lower()
+    return ("429" in s) or ("resource_exhausted" in s) or ("quota" in s) or ("rate limit" in s)
 
 def radar_chart(dim_scores_100: dict):
     labels = [d.replace("_", " ").title().replace("Decision", "Consistency") for d in DIMENSIONS]
@@ -166,18 +177,17 @@ def radar_chart(dim_scores_100: dict):
         polar=dict(
             bgcolor="rgba(0,0,0,0)",
             radialaxis=dict(visible=True, range=[0, 100], tickfont=dict(color="rgba(255,255,255,0.6)")),
-            angularaxis=dict(tickfont=dict(color="rgba(255,255,255,0.7)"))
+            angularaxis=dict(tickfont=dict(color="rgba(255,255,255,0.7)")),
         ),
         showlegend=False,
         margin=dict(l=20, r=20, t=20, b=20),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        height=360
+        height=360,
     )
     return fig
 
 def bars_df(dim_scores_100: dict):
-    rows = []
     nice = {
         "reasoning_quality": "Reasoning",
         "decision_consistency": "Consistency",
@@ -185,12 +195,11 @@ def bars_df(dim_scores_100: dict):
         "bias_awareness": "Bias Awareness",
         "failure_handling": "Failure Handling",
     }
-    for d in DIMENSIONS:
-        rows.append({"dimension": nice.get(d, d), "score": dim_scores_100[d]})
-    return pd.DataFrame(rows)
+    return pd.DataFrame([{"dimension": nice.get(d, d), "score": dim_scores_100[d]} for d in DIMENSIONS])
 
 # ------------------ HEADER ------------------
-st.markdown(f"""
+st.markdown(
+    f"""
 <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
   <div style="display:flex; gap:12px; align-items:center;">
     <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
@@ -206,7 +215,9 @@ st.markdown(f"""
     <div class="mini">{MODEL_CHIP}</div>
   </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 st.write("")
 tabs = st.tabs(["Single Run", "Comparison Matrix", "Scorecard History"])
@@ -218,37 +229,65 @@ with tabs[0]:
     with left:
         st.markdown('<div class="card">', unsafe_allow_html=True)
 
-        # ✅ Demo mode toggle (fallback when quota is exceeded)
         DEMO_MODE = st.toggle("Demo Mode (fallback if Gemini quota exceeded)", value=True)
 
         st.markdown("##### SCENARIO")
-        scenario_key = st.selectbox("Scenario Template", list(DEFAULT_SCENARIOS.keys()), label_visibility="collapsed")
-      scenario = st.text_area("Scenario (editable)", DEFAULT_SCENARIOS[scenario_key], height=250, label_visibility="collapsed")
+        scenario_key = st.selectbox(
+            "Scenario Template",
+            list(DEFAULT_SCENARIOS.keys()),
+            index=0,
+            label_visibility="collapsed",
+        )
+        scenario = st.text_area(
+            "Scenario (editable)",
+            DEFAULT_SCENARIOS[scenario_key],
+            height=250,
+            label_visibility="collapsed",
+        )
 
         st.markdown("##### AGENT PERSONA")
-        persona = st.selectbox("Agent Persona", list(AGENT_PROFILES.keys()), label_visibility="collapsed")
+        persona = st.selectbox(
+            "Agent Persona",
+            list(AGENT_PROFILES.keys()),
+            index=0,
+            label_visibility="collapsed",
+        )
         st.caption(f"“{AGENT_PROFILES[persona]}”")
 
         st.markdown("##### CREATIVITY (TEMP)")
-        temp = st.slider("Creativity (Temp)", 0.0, 1.0, 0.30, 0.05, label_visibility="collapsed")
+        temp = st.slider(
+            "Creativity (Temp)",
+            0.0, 1.0, 0.30, 0.05,
+            label_visibility="collapsed",
+        )
 
         run_btn = st.button("▶  Generate Scorecard", type="primary", use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    # placeholders
     if "last_result" not in st.session_state:
         with mid:
-            st.markdown('<div class="card" style="height:520px; display:flex; align-items:center; justify-content:center;">', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="card" style="height:520px; display:flex; align-items:center; justify-content:center;">',
+                unsafe_allow_html=True,
+            )
             st.markdown("<div style='opacity:0.7;'>Run an evaluation to see results</div>", unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
         with right:
-            st.markdown('<div class="card" style="height:520px; display:flex; align-items:center; justify-content:center;">', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="card" style="height:520px; display:flex; align-items:center; justify-content:center;">',
+                unsafe_allow_html=True,
+            )
             st.markdown("<div style='opacity:0.7;'>Scorecard will appear here</div>", unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
+    # run
     if run_btn:
+        agent_response = ""
+        eval_raw = ""
+
         try:
             agent_user = AGENT_USER.format(scenario=scenario) + f"\n\nPersona guidance: {AGENT_PROFILES[persona]}\n"
-
             with st.spinner("Generating agent response..."):
                 agent_response = generate_text(AGENT_SYSTEM, agent_user, temperature=temp)
 
@@ -256,20 +295,16 @@ with tabs[0]:
                 eval_user = EVALUATOR_USER.format(scenario=scenario, agent_response=agent_response)
                 eval_raw = generate_text(EVALUATOR_SYSTEM, eval_user, temperature=0.0)
 
-        except RuntimeError as e:
-            # ✅ Quota exceeded fallback
-            if str(e) == "GEMINI_QUOTA_EXCEEDED" and DEMO_MODE:
-                st.warning("Gemini quota exceeded (429). Using Demo Mode cached outputs so you can still generate scorecards.")
+        except Exception as e:
+            if DEMO_MODE and is_quota_error(e):
+                st.warning("Gemini quota/rate limit hit. Using Demo Mode cached outputs so you can still generate scorecards.")
                 agent_response = DEMO_AGENT_RESPONSE
                 eval_raw = DEMO_EVAL_JSON_TEXT
             else:
-                st.error("Gemini quota exceeded and Demo Mode is OFF. Enable Demo Mode or use a billed Gemini key/project.")
+                st.error(f"Run failed: {e}")
                 st.stop()
 
-        except Exception as e:
-            st.error(str(e))
-            st.stop()
-
+        # parse judge JSON
         try:
             eval_json = safe_parse_json(eval_raw)
         except Exception as e:
@@ -287,7 +322,7 @@ with tabs[0]:
             "scenario_key": scenario_key,
             "persona": persona,
             "temperature": temp,
-            "demo_mode_used": (eval_raw == DEMO_EVAL_JSON_TEXT),
+            "demo_mode_used": (eval_raw.strip() == DEMO_EVAL_JSON_TEXT.strip()),
             "agent_response": agent_response,
             "evaluation": eval_json,
             "scores_100": dim_scores_100,
@@ -300,6 +335,7 @@ with tabs[0]:
         payload["run_id"] = run_id
         st.session_state["last_result"] = payload
 
+    # render
     if "last_result" in st.session_state:
         res = st.session_state["last_result"]
         dim_scores_100 = res["scores_100"]
@@ -311,10 +347,10 @@ with tabs[0]:
             st.markdown(f"<div class='h1'>{res['persona']}</div>", unsafe_allow_html=True)
             st.markdown(
                 f"<div style='display:flex; gap:10px; align-items:center; margin-top:8px;'>"
-                f"<div class='mini' style='opacity:0.75; font-weight:700;'>You act as the Senior Product Lead for '{scenario_key.split()[0]}'…</div>"
+                f"<div class='mini' style='opacity:0.75; font-weight:700;'>You act as the Senior Product Lead for '{res['scenario_key'].split()[0]}'…</div>"
                 f"<div class='mini' style='border-color: rgba(16,215,196,0.35); background: rgba(16,215,196,0.10);'>Scorecard {res['scorecard_id']}</div>"
                 f"</div>",
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
             if res.get("demo_mode_used"):
                 st.caption("Demo Mode used (quota fallback).")
@@ -344,7 +380,7 @@ with tabs[0]:
             dfb = bars_df(dim_scores_100)
 
             for _, row in dfb.iterrows():
-                st.write(f"**{row['dimension']}**  —  {row['score']}/100")
+                st.write(f"**{row['dimension']}**  —  {int(row['score'])}/100")
                 st.progress(int(row["score"]))
                 st.write("")
 
@@ -354,7 +390,7 @@ with tabs[0]:
                 data=json.dumps(res, ensure_ascii=False, indent=2).encode("utf-8"),
                 file_name=f"agenteval_scorecard_{res['run_id']}.json",
                 mime="application/json",
-                use_container_width=True
+                use_container_width=True,
             )
             st.markdown("</div>", unsafe_allow_html=True)
 
