@@ -175,8 +175,7 @@ Support for additional judge models
 ## 📜 License
 License
 
-© 2026 Gouthami Nadupuri
-All Rights Reserved.
+© 2026 Gouthami Nadupuri | All Rights Reserved.
 
 This project, its source code, architecture, documentation, and assets are the exclusive intellectual property of Gouthami Nadupuri.
 
