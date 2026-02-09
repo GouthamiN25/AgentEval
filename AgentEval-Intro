@@ -1,0 +1,42 @@
+## Introduction
+
+As AI agents become more autonomous, we still evaluate them with narrow metrics like accuracy or task completion. Humans, however, are assessed on judgment, reasoning, collaboration, and bias. We were inspired to rethink AI evaluation—*what if we evaluated agents the way we evaluate people?*
+
+---
+
+## What it does
+
+AgentEval is a framework that **evaluates AI agents using human-like criteria**. It tests agents across realistic scenarios and scores them on reasoning quality, decision consistency, collaboration, bias awareness, and failure handling—producing transparent, comparable performance profiles.
+
+---
+
+## How we built it
+
+We built AgentEval using Gemini to generate scenario-based evaluations and rubric-driven assessments. A controller orchestrates test cases, while evaluator prompts score agent responses against structured human-style dimensions. Results are aggregated into explainable scorecards.
+
+---
+
+## Challenges we ran into
+
+Defining “human-like” evaluation without subjectivity was hard. We iterated on rubrics to balance consistency and nuance, avoided model self-grading bias, and ensured evaluations remained reproducible across runs.
+
+---
+
+## Accomplishments that we’re proud of
+
+* Designed a **human-centric agent evaluation model**
+* Created explainable, multi-dimensional scorecards
+* Demonstrated side-by-side comparison of AI agents
+* Built a clear, extensible evaluation pipeline
+
+---
+
+## What we learned
+
+Evaluating agents requires more than benchmarks—it requires context. Structured rubrics and scenario realism dramatically improve trust in evaluation outcomes, especially for autonomous systems.
+
+---
+
+## What’s next for AgentEval
+
+Next, we plan to add multi-agent collaboration tests, external ground-truth validators, continuous evaluation pipelines, and public benchmarks to help teams deploy agents responsibly at scale.
