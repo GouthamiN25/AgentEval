@@ -222,15 +222,15 @@ with tabs[0]:
         DEMO_MODE = st.toggle("Demo Mode (fallback if Gemini quota exceeded)", value=True)
 
         st.markdown("##### SCENARIO")
-        scenario_key = st.selectbox("", list(DEFAULT_SCENARIOS.keys()), label_visibility="collapsed")
-        scenario = st.text_area("", DEFAULT_SCENARIOS[scenario_key], height=250, label_visibility="collapsed")
+        scenario_key = st.selectbox("Scenario Template", list(DEFAULT_SCENARIOS.keys()), label_visibility="collapsed")
+      scenario = st.text_area("Scenario (editable)", DEFAULT_SCENARIOS[scenario_key], height=250, label_visibility="collapsed")
 
         st.markdown("##### AGENT PERSONA")
-        persona = st.selectbox("", list(AGENT_PROFILES.keys()), label_visibility="collapsed")
+        persona = st.selectbox("Agent Persona", list(AGENT_PROFILES.keys()), label_visibility="collapsed")
         st.caption(f"“{AGENT_PROFILES[persona]}”")
 
         st.markdown("##### CREATIVITY (TEMP)")
-        temp = st.slider("", 0.0, 1.0, 0.30, 0.05, label_visibility="collapsed")
+        temp = st.slider("Creativity (Temp)", 0.0, 1.0, 0.30, 0.05, label_visibility="collapsed")
 
         run_btn = st.button("▶  Generate Scorecard", type="primary", use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
